@@ -1,4 +1,4 @@
-package com.wc.widgets;
+package com.husky.library;
 
 import android.content.Context;
 import android.os.Handler;
@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import com.wc.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +138,7 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
         handler.sendEmptyMessageDelayed(0, delayTime);
     }
 
-    private void setDotResourse(int position){
+    private void setDotResource(int position){
         for (int i = 0; i < dots.size(); i++) {
             if (i == position) {
                 dots.get(i).setBackgroundResource(selectedIndicator);
@@ -158,11 +156,11 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
     @Override
     public void onPageSelected(int position) {
         if (position == 0){
-            setDotResourse(dots.size() - 1);
+            setDotResource(dots.size() - 1);
         }else if (position == ivs.size() - 1){
-            setDotResourse(0);
+            setDotResource(0);
         }else {
-            setDotResourse(position - 1);
+            setDotResource(position - 1);
         }
 
         int pageIndex = position;
@@ -208,18 +206,22 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
         public Object instantiateItem(ViewGroup container, final int position) {
             final ImageView iv = ivs.get(position);
             final T t;
+            final int pos;
             if (position == 0){
                 t = datas.get(datas.size() - 1);
+                pos = datas.size() - 1;
             }else if (position == ivs.size() - 1){
                 t = datas.get(0);
+                pos = 0;
             }else {
                 t = datas.get(position - 1);
+                pos = position - 1;
             }
             iv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onClick(iv, position, t);
+                        listener.onClick(iv, pos, t);
                     }
                 }
             });

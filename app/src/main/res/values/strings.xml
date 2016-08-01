@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Wedgets</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">WidgetTest</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

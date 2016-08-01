@@ -1,4 +1,4 @@
-package com.wc;
+package com.husky.test;
 
 import org.junit.Test;
 
