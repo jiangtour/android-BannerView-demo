@@ -1,6 +1,7 @@
 package com.husky.test;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
+                            startActivity(new Intent(MainActivity.this,UpdateActivity.class));
                         }
                     }).setNegativeButton("取消", R.drawable.neg_bg, 0, new DialogInterface.OnClickListener() {
                         @Override
