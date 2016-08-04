@@ -2,14 +2,12 @@ package com.husky.library.update;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.widget.Toast;
 
 import java.io.File;
 
@@ -25,16 +23,12 @@ public class UpdateReceiver extends BroadcastReceiver {
         System.out.println("receive broadcast");
         String action = intent.getAction();
         if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
-//            Toast.makeText(context, "下载完成！", Toast.LENGTH_LONG).show();
-
             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-
             DownloadManager.Query query = new DownloadManager.Query();
             query.setFilterById(id);
             downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Cursor cursor = downloadManager.query(query);
             int columnCount = cursor.getColumnCount();
-//            String path = null;
             String path = "";
             while (cursor.moveToNext()) {
                 for (int j = 0; j < columnCount; j++) {
@@ -47,6 +41,10 @@ public class UpdateReceiver extends BroadcastReceiver {
                         System.out.println(columnName + ": " + string);
                     } else {
                         System.out.println(columnName + ": null");
+                    }
+
+                    if (columnName.equals("status")){
+                        System.out.println("status : " + cursor.getInt(j));
                     }
                 }
             }
@@ -65,7 +63,6 @@ public class UpdateReceiver extends BroadcastReceiver {
                 install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(install);
             }
-        } else if (action.equals(DownloadManager.ACTION_NOTIFICATION_CLICKED)) {
         }
     }
 
@@ -91,4 +88,72 @@ public class UpdateReceiver extends BroadcastReceiver {
         }
         return filePath;
     }
+
+//    private void checkDownloadState() {
+//        DownloadManager.Query query = new DownloadManager.Query();
+//        String id = PreferenceUtils.getInstance(UpdateActivity.this).getApkId();
+//        query.setFilterById(Long.parseLong(id));
+//        Cursor c = manager.query(query);
+//        if (c == null) {
+//            Toast.makeText(UpdateActivity.this, "未下载", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (c.moveToFirst()) {
+//            int statusColumn = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
+//            int status = c.getInt(statusColumn);
+//            System.out.println("status : " + status);
+//            int reasonColumn = c.getColumnIndex(DownloadManager.COLUMN_REASON);
+//            int reason = c.getInt(reasonColumn);
+//            System.out.println("reason : " + reason);
+//            switch (status) {
+//                case DownloadManager.STATUS_FAILED:
+//                    checkReason(reason);
+//                    break;
+//                case DownloadManager.STATUS_PAUSED:
+//                    checkReason(reason);
+//                    break;
+//                case DownloadManager.STATUS_PENDING:
+//                    break;
+//                case DownloadManager.STATUS_RUNNING:
+//                    break;
+//                case DownloadManager.STATUS_SUCCESSFUL:
+//                    Toast.makeText(UpdateActivity.this, "下载成功", Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        }
+//        c.close();
+//    }
+//
+//    private void checkReason(int reason) {
+//        switch (reason) {
+//            case DownloadManager.ERROR_CANNOT_RESUME:
+//                break;
+//            case DownloadManager.ERROR_DEVICE_NOT_FOUND:
+//                break;
+//            case DownloadManager.ERROR_FILE_ALREADY_EXISTS:
+//                break;
+//            case DownloadManager.ERROR_FILE_ERROR:
+//                break;
+//            case DownloadManager.ERROR_HTTP_DATA_ERROR:
+//                break;
+//            case DownloadManager.ERROR_INSUFFICIENT_SPACE:
+//                Toast.makeText(UpdateActivity.this, "下载失败，存储空间不足", Toast.LENGTH_SHORT).show();
+//                break;
+//            case DownloadManager.ERROR_TOO_MANY_REDIRECTS:
+//                break;
+//            case DownloadManager.ERROR_UNHANDLED_HTTP_CODE:
+//                break;
+//            case DownloadManager.ERROR_UNKNOWN:
+//                break;
+//            case DownloadManager.PAUSED_QUEUED_FOR_WIFI:
+//                break;
+//            case DownloadManager.PAUSED_UNKNOWN:
+//                break;
+//            case DownloadManager.PAUSED_WAITING_FOR_NETWORK:
+//                break;
+//            case DownloadManager.PAUSED_WAITING_TO_RETRY:
+//                break;
+//        }
+//    }
+
 }

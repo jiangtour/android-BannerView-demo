@@ -46,23 +46,10 @@ public class UpdateManager {
         } else {
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
         }
+        request.setVisibleInDownloadsUi(false);
+        request.setMimeType("application/vnd.android.package-archive");
         long id = manager.enqueue(request);
         PreferenceUtils.getInstance(context).setApkId(Long.toString(id));
-        DownloadManager.Query query = new DownloadManager.Query();
-        query.setFilterById(id);
-        Cursor c = manager.query(query);
-        if (c.moveToFirst()) {
-            int reasonColumn = c.getColumnIndex(DownloadManager.COLUMN_REASON);
-
-            String reason = c.getString(reasonColumn);
-
-            System.out.println("reason : " + reason);
-
-            int statusColumn = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
-            int status = c.getInt(statusColumn);
-            System.out.println("status : " + status);
-        }
-        c.close();
     }
 
     public void setTitle(String title) {
