@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 
 /**
+ * 带状态的Toast 成功 失败 普通三种状态
  * @author husky
  */
 public class SpecialToast {

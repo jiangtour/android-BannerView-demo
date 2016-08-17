@@ -44,9 +44,9 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
                 int current = pager.getCurrentItem();
                 if (current == 0) {
                     pager.setCurrentItem(datas.size());
-                }else if (current == ivs.size() - 1){
+                } else if (current == ivs.size() - 1) {
                     pager.setCurrentItem(1);
-                }else {
+                } else {
                     pager.setCurrentItem(pager.getCurrentItem() + 1);
                 }
                 sendEmptyMessageDelayed(0, delayTime);
@@ -56,13 +56,14 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
 
 
     public BannerView(Context context) {
-        this(context, null);
+        this(context, null);//调用两个参数的构造函数
     }
 
     public BannerView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        this(context, attrs, 0);//调用三个参数的的构造函数
     }
 
+    //最终都会调用这个构造函数
     public BannerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
@@ -82,6 +83,12 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
         normalIndicator = R.drawable.dot_normal;
     }
 
+    /**
+     * 填充数据
+     *
+     * @param ts       数据源
+     * @param listener 回调接口 用来显示banner图片
+     */
     public void setData(List<T> ts, OnLoadImageListener<T> listener) {
         this.datas = ts;
         count = ts.size();
@@ -130,7 +137,12 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
         this.listener = listener;
     }
 
-    public void auutoPlay(boolean isAutoPlay) {
+    /**
+     * 自动播放
+     *
+     * @param isAutoPlay
+     */
+    public void autoPlay(boolean isAutoPlay) {
         this.isAutoPlay = isAutoPlay;
     }
 
@@ -138,7 +150,7 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
         handler.sendEmptyMessageDelayed(0, delayTime);
     }
 
-    private void setDotResource(int position){
+    private void setDotResource(int position) {
         for (int i = 0; i < dots.size(); i++) {
             if (i == position) {
                 dots.get(i).setBackgroundResource(selectedIndicator);
@@ -155,11 +167,11 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
 
     @Override
     public void onPageSelected(int position) {
-        if (position == 0){
+        if (position == 0) {//如果是第0页 设置圆点为最后一个
             setDotResource(dots.size() - 1);
-        }else if (position == ivs.size() - 1){
+        } else if (position == ivs.size() - 1) {//如果是最后一页,设置圆点为第0个
             setDotResource(0);
-        }else {
+        } else {
             setDotResource(position - 1);
         }
 
@@ -207,13 +219,13 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
             final ImageView iv = ivs.get(position);
             final T t;
             final int pos;
-            if (position == 0){
+            if (position == 0) {//当第一页时  真实数据是datas的最后一个
                 t = datas.get(datas.size() - 1);
                 pos = datas.size() - 1;
-            }else if (position == ivs.size() - 1){
+            } else if (position == ivs.size() - 1) {//当最后一页时，真实数据是datas的第一个
                 t = datas.get(0);
                 pos = 0;
-            }else {
+            } else {//其他情况：真实数据是data.get(当前页码 - 1)
                 t = datas.get(position - 1);
                 pos = position - 1;
             }
@@ -236,11 +248,31 @@ public class BannerView<T> extends RelativeLayout implements ViewPager.OnPageCha
         }
     }
 
+    /**
+     * 图片显示回调接口
+     * 用于给每页的image view 设置对应的图片
+     *
+     * @param <T>
+     */
     public interface OnLoadImageListener<T> {
+        /**
+         * @param iv 当前的页面image view
+         * @param t  当前对应的数据
+         */
         void onLoad(ImageView iv, T t);
     }
 
+    /**
+     * banner点击事件回调接口
+     */
     public interface OnBannerClickListener<T> {
+        /**
+         * banner图片点击事件
+         *
+         * @param view     当前点击的图片
+         * @param position 当前点击的真实位置(对应datas)
+         * @param t        当前的真实数据
+         */
         void onClick(View view, int position, T t);
     }
 }
