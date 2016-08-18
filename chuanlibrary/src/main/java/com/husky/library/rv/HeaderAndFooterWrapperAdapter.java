@@ -91,19 +91,19 @@ public class HeaderAndFooterWrapperAdapter extends RecyclerView.Adapter<Recycler
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         innerAdapter.onAttachedToRecyclerView(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager){
+        if (layoutManager instanceof GridLayoutManager) {
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             final GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
                     int viewType = getItemViewType(position);
-                    if (headerViews.get(viewType) != null){
+                    if (headerViews.get(viewType) != null) {
                         return gridLayoutManager.getSpanCount();
-                    }else if (footerViews.get(viewType) != null){
+                    } else if (footerViews.get(viewType) != null) {
                         return gridLayoutManager.getSpanCount();
                     }
-                    if (spanSizeLookup != null){
+                    if (spanSizeLookup != null) {
                         return spanSizeLookup.getSpanSize(position);
                     }
                     return 1;
@@ -117,9 +117,9 @@ public class HeaderAndFooterWrapperAdapter extends RecyclerView.Adapter<Recycler
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         innerAdapter.onViewAttachedToWindow(holder);
         int position = holder.getLayoutPosition();
-        if (isHeaderPos(position) || isFooterPos(position)){
+        if (isHeaderPos(position) || isFooterPos(position)) {
             ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-            if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams){
+            if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
                 StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
                 p.setFullSpan(true);
             }

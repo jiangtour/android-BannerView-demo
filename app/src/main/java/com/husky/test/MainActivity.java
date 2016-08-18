@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.husky.library.BannerView;
 import com.husky.library.CustomDialog;
 import com.husky.library.SpecialToast;
+import com.husky.library.photo.photo.widget.PickConfig;
 import com.husky.library.rv.GridRecyclerViewDivider;
 import com.husky.library.rv.HeaderAndFooterWrapperAdapter;
 import com.husky.library.tools.SizeUtils;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        BannerView bannerView = (BannerView) LayoutInflater.from(this).inflate(R.layout.header,null).findViewById(R.id.banner);
         BannerView bannerView = new BannerView(this);
-        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SizeUtils.dp2px(this,200));
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SizeUtils.dp2px(this, 200));
         bannerView.setLayoutParams(lp);
         bannerView.setData(pics, new BannerView.OnLoadImageListener<String>() {
             @Override
@@ -64,39 +65,51 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position, String o) {
                 if (position == 0) {
-                    new CustomDialog.Builder(MainActivity.this).setTitle("提示").setMessage(o).setPositiveButton("确定", R.drawable.pos_bg, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                            startActivity(new Intent(MainActivity.this, UpdateActivity.class));
-                        }
-                    }).setNegativeButton("取消", R.drawable.neg_bg, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    }).create().show();
+                    new CustomDialog.Builder(MainActivity.this)
+                            .setTitle("提示")
+                            .setMessage(o)
+                            .setPositiveButton("确定", R.drawable.pos_bg, 0, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    startActivity(new Intent(MainActivity.this, UpdateActivity.class));
+                                }
+                            })
+                            .setNegativeButton("取消", R.drawable.neg_bg, 0, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .create()
+                            .show();
                 } else if (position == 1) {
                     SpecialToast.make(MainActivity.this, SpecialToast.TYPE_SUCCESS, o, SpecialToast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this,CountDownActivity.class));
+                    startActivity(new Intent(MainActivity.this, CountDownActivity.class));
                 } else if (position == 2) {
                     SpecialToast.make(MainActivity.this, SpecialToast.TYPE_ERROR, o, SpecialToast.LENGTH_SHORT).show();
+                    new PickConfig.Builder(MainActivity.this)
+                            .actionBarcolor(getResources().getColor(R.color.colorPrimary))
+                            .statusBarcolor(getResources().getColor(R.color.colorPrimaryDark))
+                            .isneedcamera(true)
+                            .isneedcrop(true)
+                            .isSqureCrop(true).spanCount(3).pickMode(PickConfig.MODE_SINGLE_PICK).build();
                 }
             }
         });
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        recyclerView.setLayoutManager(new GridLayoutManager(this,2,LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new GridRecyclerViewDivider(this));
         adapter = new HeaderAndFooterWrapperAdapter(new SimpleAdapter());
         adapter.addHeaderView(bannerView);
         recyclerView.setAdapter(adapter);
     }
 
-    private void refresh(){
+    private void refresh() {
         for (int i = 'a'; i < 'z'; i++) {
-            contents.add(String.valueOf((char)i));
+            contents.add(String.valueOf((char) i));
         }
 //        adapter.refreshContent();
         adapter.notifyDataSetChanged();
@@ -104,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -114,11 +127,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.Holder>{
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == PickConfig.PICK_REQUEST_CODE) {
+            ArrayList<String> paths = data.getStringArrayListExtra("data");
+            SpecialToast.make(this, SpecialToast.TYPE_SUCCESS, paths.toString(), SpecialToast.LENGTH_SHORT).show();
+        }
+    }
+
+    class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.Holder> {
 
         @Override
         public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
 
             return new Holder(view);
         }
@@ -135,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
         class Holder extends RecyclerView.ViewHolder {
             private TextView textView;
+
             public Holder(View itemView) {
                 super(itemView);
                 textView = (TextView) itemView.findViewById(R.id.item_tv);

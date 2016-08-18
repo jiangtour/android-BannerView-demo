@@ -34,3 +34,8 @@
 8、下载更新
 
   ![image](https://github.com/jiangtour/android-BannerView-demo/blob/master/screenShoot/update.png)
+  
+9、照片选择、裁剪
+
+  ![image](https://github.com/jiangtour/android-BannerView-demo/blob/master/screenShoot/select.png)
+  ![image](https://github.com/jiangtour/android-BannerView-demo/blob/master/screenShoot/crop.png)
