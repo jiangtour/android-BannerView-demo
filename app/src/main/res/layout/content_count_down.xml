@@ -8,8 +8,15 @@
     tools:context="com.husky.test.CountDownActivity"
     tools:showIn="@layout/activity_count_down">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv"
+
+    <com.husky.library.swipe.CustomSwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/refresh">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.husky.library.swipe.CustomSwipeRefreshLayout>
+
 </RelativeLayout>

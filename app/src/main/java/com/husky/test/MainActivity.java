@@ -2,7 +2,10 @@ package com.husky.test;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private List<String> contents = new ArrayList<>();
     private HeaderAndFooterWrapperAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.DKGRAY));
 
         pics = new ArrayList<>();
         pics.add("http://file27.mafengwo.net/M00/B2/1A/wKgB6lO0alyAJXh6AAVhjQksfsQ81.rbook_comment.w600_h400.jpeg");

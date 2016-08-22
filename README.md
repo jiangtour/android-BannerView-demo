@@ -39,3 +39,7 @@
 
   ![image](https://github.com/jiangtour/android-BannerView-demo/blob/master/screenShoot/select.png)
   ![image](https://github.com/jiangtour/android-BannerView-demo/blob/master/screenShoot/crop.png)
+  
+10、简单的下拉刷新
+  
+  ![image](https://github.com/jiangtour/android-BannerView-demo/blob/master/screenShoot/refresh.gif)
